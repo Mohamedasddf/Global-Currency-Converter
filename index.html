@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Directory</title>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #controls {
+            margin-bottom: 20px;
+        }
+
+        #add-doctor, #search {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #add-doctor {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+        }
+
+        #add-doctor:hover {
+            background-color: #2980b9;
+        }
+
+        #search {
+            border: 1px solid #ccc;
+            width: 200px;
+        }
+
+        #container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .card {
+            width: 200px;
+            background: #444;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            color: white;
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+
+        .btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #c0392b;
+        }
+
+        .edit-btn {
+            background-color: #f1c40f;
+        }
+
+        .edit-btn:hover {
+            background-color: #d4ac0d;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="controls">
+    <button id="add-doctor">إضافة دكتور جديد</button>
+    <input type="text" id="search" placeholder="ابحث عن طبيب...">
+</div>
+
+<div id="container"></div>
+
+<script>
+    let doctors = JSON.parse(localStorage.getItem('doctors')) || [
+        { name: 'D:ahmed', age: '18 years old', image: 'img/doctor.png' },
+        { name: 'D:ali', age: '19 years old', image: 'img/doctor.png' },
+        { name: 'D:mohamed', age: '20 years old', image: 'img/doctor.png' }
+    ];
+
+    const container = document.getElementById('container');
+    const searchInput = document.getElementById('search');
+
+    function saveToLocalStorage() {
+        localStorage.setItem('doctors', JSON.stringify(doctors));
+    }
+
+    function displayDoctors(filteredDoctors = doctors) {
+        container.innerHTML = '';
+        filteredDoctors.forEach((doctor, index) => createCard(doctor, index));
+    }
+
+    function createCard(doctor, index) {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const img = document.createElement('img');
+        img.src = doctor.image;
+
+        const name = document.createElement('h3');
+        name.textContent = doctor.name;
+
+        const age = document.createElement('p');
+        age.textContent = doctor.age;
+
+        const btnGroup = document.createElement('div');
+        btnGroup.className = 'btn-group';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'حذف';
+        deleteBtn.className = 'btn';
+        deleteBtn.onclick = () => deleteDoctor(index);
+
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'تعديل';
+        editBtn.className = 'btn edit-btn';
+        editBtn.onclick = () => editDoctor(index);
+
+        btnGroup.appendChild(editBtn);
+        btnGroup.appendChild(deleteBtn);
+
+        card.appendChild(img);
+        card.appendChild(name);
+        card.appendChild(age);
+        card.appendChild(btnGroup);
+        container.appendChild(card);
+    }
+
+    function addDoctor() {
+        const name = prompt('أدخل اسم الدكتور:');
+        const age = prompt('أدخل عمر الدكتور:');
+        if (name && age) {
+            doctors.push({ name, age, image: 'img/doctor.png' });
+            saveToLocalStorage();
+            displayDoctors();
+        } else {
+            alert('يرجى إدخال بيانات صحيحة.');
+        }
+    }
+
+    function deleteDoctor(index) {
+        if (confirm('هل أنت متأكد من حذف هذا الطبيب؟')) {
+            doctors.splice(index, 1);
+            saveToLocalStorage();
+            displayDoctors();
+        }
+    }
+
+    function editDoctor(index) {
+        const newName = prompt('تعديل الاسم:', doctors[index].name);
+        const newAge = prompt('تعديل العمر:', doctors[index].age);
+        if (newName && newAge) {
+            doctors[index].name = newName;
+            doctors[index].age = newAge;
+            saveToLocalStorage();
+            displayDoctors();
+        }
+    }
+
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase();
+        const filteredDoctors = doctors.filter(doctor =>
+            doctor.name.toLowerCase().includes(query)
+        );
+        displayDoctors(filteredDoctors);
+    });
+
+    document.getElementById('add-doctor').addEventListener('click', addDoctor);
+
+    displayDoctors();
+</script>
+
+</body>
+</html>
