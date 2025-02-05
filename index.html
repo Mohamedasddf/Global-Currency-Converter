@@ -2,210 +2,178 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>Doctor Directory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محول العملات</title>
     <style>
         body {
-            background-color: #f4f4f4;
             font-family: Arial, sans-serif;
-            padding: 20px;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .currency-converter {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
             text-align: center;
         }
-
-        #controls {
-            margin-bottom: 20px;
+        h1 {
+            color: #4CAF50;
         }
-
-        #add-doctor, #search {
-            padding: 10px 15px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
+        .input-container {
+            margin: 15px 0;
         }
-
-        #add-doctor {
-            background-color: #3498db;
-            color: white;
-            cursor: pointer;
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
         }
-
-        #add-doctor:hover {
-            background-color: #2980b9;
+        input:focus, select:focus {
+            border-color: #4CAF50;
+            outline: none;
         }
-
-        #search {
-            border: 1px solid #ccc;
-            width: 200px;
-        }
-
-        #container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .card {
-            width: 200px;
-            background: #444;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            color: white;
-            transition: transform 0.3s;
-            position: relative;
-        }
-
-        .card:hover {
-            transform: scale(1.05);
-        }
-
-        img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-        }
-
-        .btn-group {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 10px;
-        }
-
-        .btn {
-            background-color: #e74c3c;
+        button {
+            background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
+            padding: 10px 20px;
+            border-radius: 4px;
             cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
         }
-
-        .btn:hover {
-            background-color: #c0392b;
+        button:hover {
+            background-color: #45a049;
         }
-
-        .edit-btn {
-            background-color: #f1c40f;
-        }
-
-        .edit-btn:hover {
-            background-color: #d4ac0d;
-        }
-
-        @media (max-width: 600px) {
-            .card {
-                width: 90%;
-            }
+        .error-message {
+            color: red;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
 
-<div id="controls">
-    <button id="add-doctor">إضافة دكتور جديد</button>
-    <input type="text" id="search" placeholder="ابحث عن طبيب...">
+<div class="currency-converter">
+    <h1>محول العملات</h1>
+
+    <!-- اختيار العملة الأصلية -->
+    <div class="input-container">
+        <label for="from-currency">اختر العملة الأصلية:</label>
+        <select id="from-currency">
+            <option value="USD">دولار أمريكي (USD)</option>
+            <option value="EUR">يورو (EUR)</option>
+            <option value="GBP">جنيه إسترليني (GBP)</option>
+            <option value="SAR">ريال سعودي (SAR)</option>
+            <option value="AED">درهم إماراتي (AED)</option>
+            <option value="QAR">ريال قطري (QAR)</option>
+            <option value="INR">روبية هندية (INR)</option>
+            <option value="JPY">ين ياباني (JPY)</option>
+            <option value="EGP">جنيه مصري (EGP)</option>
+            <option value="NGN">نايرا نيجيرية (NGN)</option>
+            <option value="KES">شلن كيني (KES)</option>
+            <option value="CNY">رينمنبي صيني (CNY)</option>
+            <option value="CHF">فرنك سويسري (CHF)</option>
+            <option value="SEK">كرونة سويدية (SEK)</option>
+            <option value="NOK">كرونة نرويجية (NOK)</option>
+            <option value="OMR">ريال عماني (OMR)</option>
+        </select>
+    </div>
+
+    <!-- إدخال المبلغ -->
+    <div class="input-container">
+        <label for="amount">المبلغ:</label>
+        <input type="number" id="amount" placeholder="أدخل المبلغ">
+    </div>
+
+    <!-- اختيار العملة المستهدفة -->
+    <div class="input-container">
+        <label for="to-currency">إلى العملة:</label>
+        <select id="to-currency">
+            <option value="USD">دولار أمريكي (USD)</option>
+            <option value="EUR">يورو (EUR)</option>
+            <option value="GBP">جنيه إسترليني (GBP)</option>
+            <option value="SAR">ريال سعودي (SAR)</option>
+            <option value="AED">درهم إماراتي (AED)</option>
+            <option value="QAR">ريال قطري (QAR)</option>
+            <option value="INR">روبية هندية (INR)</option>
+            <option value="JPY">ين ياباني (JPY)</option>
+            <option value="EGP">جنيه مصري (EGP)</option>
+            <option value="NGN">نايرا نيجيرية (NGN)</option>
+            <option value="KES">شلن كيني (KES)</option>
+            <option value="CNY">رينمنبي صيني (CNY)</option>
+            <option value="CHF">فرنك سويسري (CHF)</option>
+            <option value="SEK">كرونة سويدية (SEK)</option>
+            <option value="NOK">كرونة نرويجية (NOK)</option>
+            <option value="OMR">ريال عماني (OMR)</option>
+        </select>
+    </div>
+
+    <!-- النتيجة -->
+    <div class="input-container">
+        <label for="converted">المبلغ المحول:</label>
+        <input type="number" id="converted" readonly>
+    </div>
+
+    <button onclick="resetValues()">إعادة تعيين</button>
 </div>
 
-<div id="container"></div>
-
 <script>
-    let doctors = JSON.parse(localStorage.getItem('doctors')) || [
-        { name: 'D:ahmed', age: '18 years old', image: 'img/doctor.png' },
-        { name: 'D:ali', age: '19 years old', image: 'img/doctor.png' },
-        { name: 'D:mohamed', age: '20 years old', image: 'img/doctor.png' }
-    ];
+    // استدعاء API أسعار الصرف
+    const apiUrl = 'https://api.exchangerate-api.com/v4/latest/EGP'; // يمكنك تغيير مصدر API هنا
 
-    const container = document.getElementById('container');
-    const searchInput = document.getElementById('search');
+    let fromCurrency = document.getElementById('from-currency');
+    let toCurrency = document.getElementById('to-currency');
+    let amount = document.getElementById('amount');
+    let converted = document.getElementById('converted');
 
-    function saveToLocalStorage() {
-        localStorage.setItem('doctors', JSON.stringify(doctors));
-    }
-
-    function displayDoctors(filteredDoctors = doctors) {
-        container.innerHTML = '';
-        filteredDoctors.forEach((doctor, index) => createCard(doctor, index));
-    }
-
-    function createCard(doctor, index) {
-        const card = document.createElement('div');
-        card.className = 'card';
-
-        const img = document.createElement('img');
-        img.src = doctor.image;
-
-        const name = document.createElement('h3');
-        name.textContent = doctor.name;
-
-        const age = document.createElement('p');
-        age.textContent = doctor.age;
-
-        const btnGroup = document.createElement('div');
-        btnGroup.className = 'btn-group';
-
-        const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = 'حذف';
-        deleteBtn.className = 'btn';
-        deleteBtn.onclick = () => deleteDoctor(index);
-
-        const editBtn = document.createElement('button');
-        editBtn.textContent = 'تعديل';
-        editBtn.className = 'btn edit-btn';
-        editBtn.onclick = () => editDoctor(index);
-
-        btnGroup.appendChild(editBtn);
-        btnGroup.appendChild(deleteBtn);
-
-        card.appendChild(img);
-        card.appendChild(name);
-        card.appendChild(age);
-        card.appendChild(btnGroup);
-        container.appendChild(card);
-    }
-
-    function addDoctor() {
-        const name = prompt('أدخل اسم الدكتور:');
-        const age = prompt('أدخل عمر الدكتور:');
-        if (name && age) {
-            doctors.push({ name, age, image: 'img/doctor.png' });
-            saveToLocalStorage();
-            displayDoctors();
-        } else {
-            alert('يرجى إدخال بيانات صحيحة.');
+    // تحويل العملة
+    function convertCurrency() {
+        const from = fromCurrency.value;
+        const to = toCurrency.value;
+        const amountValue = parseFloat(amount.value);
+        
+        if (isNaN(amountValue) || amountValue <= 0) {
+            converted.value = '';
+            return;
         }
-    }
 
-    function deleteDoctor(index) {
-        if (confirm('هل أنت متأكد من حذف هذا الطبيب؟')) {
-            doctors.splice(index, 1);
-            saveToLocalStorage();
-            displayDoctors();
+        if (from === to) {
+            converted.value = amountValue;
+            return;
         }
+
+        fetch(`https://api.exchangerate-api.com/v4/latest/${from}`)
+            .then(response => response.json())
+            .then(data => {
+                const rate = data.rates[to];
+                converted.value = (amountValue * rate).toFixed(2);
+            })
+            .catch(err => {
+                console.error('Error fetching exchange rates:', err);
+            });
     }
 
-    function editDoctor(index) {
-        const newName = prompt('تعديل الاسم:', doctors[index].name);
-        const newAge = prompt('تعديل العمر:', doctors[index].age);
-        if (newName && newAge) {
-            doctors[index].name = newName;
-            doctors[index].age = newAge;
-            saveToLocalStorage();
-            displayDoctors();
-        }
+    // تغيير العملة الأصلية أو المستهدفة
+    fromCurrency.onchange = convertCurrency;
+    toCurrency.onchange = convertCurrency;
+    amount.onkeyup = convertCurrency;
+
+    // إعادة تعيين القيم
+    function resetValues() {
+        amount.value = '';
+        converted.value = '';
+        fromCurrency.value = 'EGP';
+        toCurrency.value = 'USD';
     }
-
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value.toLowerCase();
-        const filteredDoctors = doctors.filter(doctor =>
-            doctor.name.toLowerCase().includes(query)
-        );
-        displayDoctors(filteredDoctors);
-    });
-
-    document.getElementById('add-doctor').addEventListener('click', addDoctor);
-
-    displayDoctors();
 </script>
 
 </body>
